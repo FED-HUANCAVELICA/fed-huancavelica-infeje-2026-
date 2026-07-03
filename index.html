@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Corporativo FED - Región Huancavelica</title>
+    <!-- Tailwind CSS para diseño de alta gama -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
@@ -29,7 +30,6 @@
             border-color: var(--theme-glow, #3b82f6);
         }
 
-        /* Animación de entrada para las tarjetas */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -42,17 +42,17 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- BIENVENIDA POP-UP INICIAL -->
     <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl transition-opacity duration-500">
         <div class="glass-card max-w-4xl w-full mx-4 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row border border-white/10">
-            
-            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[280px]">
+            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[250px]">
                 <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80');"></div>
                 <div class="relative z-10">
                     <span class="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">EDICIÓN EXPERTA 2026</span>
                     <h2 class="text-3xl font-black mt-4 leading-tight tracking-tight">Dinamización de la Gestión Pública</h2>
                 </div>
                 <div class="relative z-10">
-                    <p class="text-xs opacity-80 italic border-l-2 border-emerald-400 pl-3">"Garantizando el Desarrollo Infantil Temprano y coberturas sociales integrales en Huancavelica."</p>
+                    <p class="text-xs opacity-80 italic border-l-2 border-emerald-400 pl-3">"Garantizando el Desarrollo Infantil Temprano y coberturas sociales en Huancavelica."</p>
                 </div>
             </div>
             
@@ -75,6 +75,317 @@
         </div>
     </div>
 
+    <!-- VENTANA DETALLE MODAL -->
     <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden transition-all duration-300">
         <div class="glass-card max-w-3xl w-full mx-4 rounded-2xl overflow-hidden shadow-2xl relative bg-slate-950/95 p-6 md:p-8 border border-white/10">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all text-sm w-10 h-10 flex items-center justify-center cursor-pointer font-bold">✕</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- ENCABEZADO -->
+    <header class="border-b border-white/10 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-red-600 text-white font-black px-4 py-1.5 rounded text-base tracking-tighter">PERÚ</div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-white uppercase tracking-tight">Fondo de Estímulo al Desempeño (FED)</h1>
+                    <p class="text-xs text-slate-400">Gerencia Regional de Desarrollo Social &bull; Gobierno Regional de Huancavelica</p>
+                </div>
+            </div>
+            
+            <div id="syncStatus" class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
+                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Conectando...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN CORREGIDA EN UNA SOLA FILA -->
+    <nav class="max-w-7xl mx-auto w-full px-6 mt-6">
+        <div class="bg-slate-950/80 p-2 rounded-2xl border border-white/5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            <button onclick="switchCategory('educacion')" id="tab-educacion" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+                📚 EDUCACIÓN
+            </button>
+            <button onclick="switchCategory('salud')" id="tab-salud" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+                </div>🩺 SALUD
+            </button>
+            <button onclick="switchCategory('violencia')" id="tab-violencia" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+                💜 VIOLENCIA MUJER
+            </button>
+            <button onclick="switchCategory('agua')" id="tab-agua" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+                🚰 AGUA Y SANEAMIENTO
+            </button>
+            <button onclick="switchCategory('articulacion')" id="tab-articulacion" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+                🤝 ARTICULACIÓN
+            </button>
+        </div>
+    </nav>
+
+    <!-- CUERPO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto w-full px-6 py-8 flex-grow">
+        <div class="mb-8 text-center md:text-left">
+            <h2 class="text-4xl font-black text-white tracking-tight uppercase">MATRIZ DE SEGUIMIENTO EDITORIAL</h2>
+            <p id="pageSubtitle" class="text-blue-400 font-extrabold text-xl mt-1 tracking-wide uppercase">CATEGORÍA EDUCACIÓN</p>
+        </div>
+
+        <div id="indicatorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </main>
+
+    <footer class="border-t border-white/5 bg-slate-950/40 py-4 px-6 text-center text-xs text-slate-500 font-mono">
+        Dashboard Silicon Valley Escalable &bull; Mapeo Automatizado Global
+    </footer>
+
+    <!-- INTERFACE LOGIC ENGINE -->
+    <script>
+        let fedData = [];
+        let currentCategory = 'educacion';
+
+        const colorThemes = {
+            educacion: { bg: 'bg-blue-600', glow: '#3b82f6', text: 'text-blue-400' },
+            salud: { bg: 'bg-emerald-600', glow: '#10b981', text: 'text-emerald-400' },
+            violencia: { bg: 'bg-fuchsia-600', glow: '#d946ef', text: 'text-fuchsia-400' },
+            agua: { bg: 'bg-cyan-600', glow: '#06b6d4', text: 'text-cyan-400' },
+            articulacion: { bg: 'bg-orange-600', glow: '#f97316', text: 'text-orange-400' }
+        };
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5";
+            });
+
+            const activeTab = document.getElementById(`tab-${cat}`);
+            const subtitle = document.getElementById('pageSubtitle');
+            const theme = colorThemes[cat];
+            
+            if(activeTab) activeTab.className = `tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center ${theme.bg} text-white shadow-lg`;
+            subtitle.innerText = cat === 'violencia' ? "CATEGORÍA VIOLENCIA CONTRA LA MUJER" : `CATEGORÍA ${cat.toUpperCase()}`;
+            subtitle.className = `${theme.text} font-extrabold text-xl mt-1 tracking-wide uppercase`;
+
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('indicatorsGrid');
+            grid.innerHTML = '';
+
+            const filtered = fedData.filter(item => item.categoria === currentCategory);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-bold">Esperando sincronización o no hay datos para la categoría "${currentCategory}" en tu Sheets.</div>`;
+                return;
+            }
+
+            filtered.forEach((item, index) => {
+                let badge = '';
+                if(item.estado === 'CUMPLE') badge = `<span class="px-2.5 py-1 text-xs font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-md">CUMPLE</span>`;
+                if(item.estado === 'EN PROCESO') badge = `<span class="px-2.5 py-1 text-xs font-black bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-md">EN PROCESO</span>`;
+                if(item.estado === 'EN RIESGO') badge = `<span class="px-2.5 py-1 text-xs font-black bg-red-500/10 text-red-400 border border-red-500/20 rounded-md">EN RIESGO</span>`;
+
+                const theme = colorThemes[item.categoria] || colorThemes.educacion;
+
+                const card = document.createElement('div');
+                card.className = `glass-card p-6 rounded-2xl cursor-pointer flex flex-col justify-between opacity-0 animate-fade-in`;
+                card.style.animationDelay = `${index * 30}ms`;
+                card.style.setProperty('--theme-glow', theme.glow);
+                card.onclick = () => openDetailModal(item.codigo);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-mono font-black bg-white/5 px-2.5 py-1 rounded border border-white/5 text-slate-300">${item.codigo}</span>
+                            ${badge}
+                        </div>
+                        <h4 class="text-base font-bold text-white leading-snug mb-2 line-clamp-2">${item.titulo || item.codigo}</h4>
+                        <p class="text-slate-400 text-xs line-clamp-3 mb-4 text-justify">${item.descripcion}</p>
+                    </div>
+                    <div class="border-t border-white/5 pt-4 grid grid-cols-3 gap-1 text-center">
+                        <div>
+                            <div class="text-[9px] uppercase text-slate-500 font-bold tracking-wider">LB</div>
+                            <div class="text-xs font-bold text-slate-300 mt-0.5">${item.basal}</div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] uppercase text-slate-500 font-bold tracking-wider">Meta</div>
+                            <div class="text-xs font-bold text-white mt-0.5">${item.meta}</div>
+                        </div>
+                        <div class="bg-white/5 rounded p-1">
+                            <div class="text-[9px] uppercase text-slate-400 font-black tracking-wider">Avance</div>
+                            <div class="text-xs font-black text-amber-400 mt-0.5">${item.avance}</div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openDetailModal(code) {
+            const item = fedData.find(d => d.codigo === code);
+            if(!item) return;
+
+            let badgeColor = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+            if(item.estado === 'CUMPLE') badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            if(item.estado === 'EN RIESGO') badgeColor = 'bg-red-500/10 text-red-400 border-red-500/20';
+            if(item.estado === 'EN PROCESO') badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="flex flex-col gap-4 max-h-[85vh] overflow-y-auto pr-2">
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-mono bg-white/5 border border-white/10 text-slate-300 px-3 py-1 rounded font-bold">${item.codigo}</span>
+                        <span class="px-3 py-0.5 text-xs font-bold border rounded ${badgeColor}">${item.estado}</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-black text-white leading-tight">${item.titulo || item.codigo}</h3>
+                    <p class="text-slate-300 text-xs leading-relaxed text-justify bg-white/5 p-4 rounded-xl border border-white/5">${item.descripcion}</p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center bg-slate-900/60 p-4 rounded-xl border border-white/5">
+                        <div>
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Línea Base</div>
+                            <div class="text-sm font-black text-slate-300 mt-1">${item.basal}</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Meta Pactada</div>
+                            <div class="text-sm font-black text-white mt-1">${item.meta}</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Avance Real</div>
+                            <div class="text-sm font-black text-amber-400 mt-1">${item.avance}</div>
+                        </div>
+                        <div>
+                            <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Plazo / Corte</div>
+                            <div class="text-xs font-semibold text-slate-400 mt-1.5 leading-tight">${item.plazo}</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="bg-red-500/5 border border-red-500/10 p-3 rounded-lg flex gap-3">
+                            <div class="text-red-400 font-bold text-sm">🚨</div>
+                            <div>
+                                <h5 class="text-xs uppercase tracking-wider font-extrabold text-red-400 mb-0.5">Nudo Crítico</h5>
+                                <p class="text-slate-300 text-xs text-justify leading-relaxed">${item.nudos_criticos || 'Ninguno reportado.'}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-emerald-500/5 border border-emerald-500/10 p-3 rounded-lg flex gap-3">
+                            <div class="text-emerald-400 font-bold text-sm">💡</div>
+                            <div>
+                                <h5 class="text-xs uppercase tracking-wider font-extrabold text-emerald-400 mb-0.5">Acción de Mejora</h5>
+                                <p class="text-slate-300 text-xs text-justify leading-relaxed">${item.acciones || 'Pendiente de asignación.'}</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-900/40 p-3 rounded-lg flex gap-3 border border-white/5">
+                            <div class="text-slate-400 font-bold text-sm">👤</div>
+                            <div>
+                                <h5 class="text-xs uppercase tracking-wider font-extrabold text-slate-400 mb-0.5">Responsable</h5>
+                                <p class="text-slate-300 text-xs font-semibold">${item.responsable || 'No especificado.'}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() { document.getElementById('detailModal').classList.add('hidden'); }
+        function closeWelcomeModal() {
+            document.getElementById('welcomeModal').classList.add('opacity-0');
+            setTimeout(() => document.getElementById('welcomeModal').style.display = 'none', 500);
+        }
+
+        function parseCSVLine(text) {
+            let p = '', r = [];
+            let q = false;
+            for (let i = 0; i < text.length; i++) {
+                let c = text[i];
+                if (c === '"') { q = !q; }
+                else if (c === ',' && !q) { r.push(p.trim()); p = ''; }
+                else if (c === '\r') { }
+                else { p += c; }
+            }
+            r.push(p.trim());
+            return r;
+        }
+
+        async function fetchLiveGoogleSheetsData(csvUrl) {
+            try {
+                const response = await fetch(csvUrl);
+                const csvText = await response.text();
+                // Separar limpiamente por saltos de línea sin importar el sistema operativo
+                const lines = csvText.split(/\r?\n/);
+                if(lines.length < 2) return;
+
+                // Leer cabeceras de forma dinámica y pasarlas a minúsculas limpias
+                const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
+                
+                // Mapeador flexible mediante palabras clave
+                const findIdx = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
+
+                const idx = {
+                    codigo: findIdx(['cod', 'indicador']),
+                    categoria: findIdx(['cat']),
+                    titulo: findIdx(['tit', 'nom']),
+                    descripcion: findIdx(['desc', 'indicador']),
+                    basal: findIdx(['bas']),
+                    meta: findIdx(['met']),
+                    plazo: findIdx(['pla']),
+                    avance: findIdx(['ava']),
+                    estado: findIdx(['est', 'cumpl']),
+                    nudos: findIdx(['nud', 'coment']),
+                    acciones: findIdx(['acc', 'mejor']),
+                    responsable: findIdx(['res'])
+                };
+
+                const parsedData = [];
+
+                for(let i = 1; i < lines.length; i++) {
+                    if(!lines[i].trim()) continue;
+                    const cols = parseCSVLine(lines[i]);
+                    
+                    // Si el identificador mínimo (Código) existe, procesamos la fila de forma segura
+                    if(idx.codigo !== -1 && cols[idx.codigo]) {
+                        let descRaw = idx.descripcion !== -1 ? cols[idx.descripcion] : '';
+                        let titleRaw = idx.titulo !== -1 ? cols[idx.titulo] : '';
+                        
+                        // Si no hay un título explícito, extraemos los primeros caracteres del indicador
+                        if(!titleRaw && descRaw) {
+                            titleRaw = descRaw.split(':')[0] || cols[idx.codigo];
+                        }
+
+                        parsedData.push({
+                            codigo: cols[idx.codigo] || 'S/C',
+                            categoria: idx.categoria !== -1 ? cols[idx.categoria].toLowerCase().trim() : 'educacion',
+                            titulo: titleRaw,
+                            descripcion: descRaw || 'Sin descripción.',
+                            basal: idx.basal !== -1 ? cols[idx.basal] : '-',
+                            meta: idx.meta !== -1 ? cols[idx.meta] : '-',
+                            plazo: idx.plazo !== -1 ? cols[idx.plazo] : '-',
+                            avance: idx.avance !== -1 ? cols[idx.avance] : '-',
+                            estado: idx.estado !== -1 ? cols[idx.estado].toUpperCase().trim() : 'EN PROCESO',
+                            nudos_criticos: idx.nudos !== -1 ? cols[idx.nudos] : '',
+                            acciones: idx.acciones !== -1 ? cols[idx.acciones] : '',
+                            responsable: idx.responsable !== -1 ? cols[idx.responsable] : ''
+                        });
+                    }
+                }
+
+                if(parsedData.length > 0) {
+                    fedData = parsedData;
+                    document.getElementById('syncStatus').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Sheets Conectado Live</span>';
+                    document.getElementById('syncStatus').className = "flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 rounded-full";
+                    switchCategory('educacion');
+                }
+            } catch (error) {
+                console.error("Error en el parser dinámico:", error);
+                document.getElementById('syncStatus').innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-xs text-red-400 font-bold uppercase tracking-wider">Error de Sincronización</span>';
+                document.getElementById('syncStatus').className = "flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-4 py-1.5 rounded-full";
+            }
+        }
+
+        // ENLACE DIRECTO A TU SPREADSHEET EN HUANCAVELICA
+        const googleSheetsCSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9zDKSFC5KpqpeLDkuaL183NmuqDnxgIqSB-vI9bp7Lac9tzJGcbse0JVt4mCKxemTiF7jdEiWBiyl/pub?output=csv'; 
+        fetchLiveGoogleSheetsData(googleSheetsCSV);
+    </script>
+</body>
+</html>
