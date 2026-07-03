@@ -57,7 +57,7 @@
             
             <div class="md:w-7/12 p-8 md:p-10 flex flex-col justify-between bg-slate-950/95">
                 <div>
-                    <h3 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Monitoreo Estratégion del FED</h3>
+                    <h3 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Monitoreo Estratégico del FED</h3>
                     <p class="text-slate-300 text-sm leading-relaxed mb-4 text-justify">
                         El <strong>Fondo de Estímulo al Desempeño y Logro de Resultados Sociales (FED)</strong> opera como un mecanismo de vanguardia en la gestión por resultados, vinculando el financiamiento al cumplimiento estricto de metas regionales.
                     </p>
@@ -104,7 +104,7 @@
                 📚 EDUCACIÓN
             </button>
             <button onclick="switchCategory('salud')" id="tab-salud" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
-                实时🩺 SALUD
+                🩺 SALUD
             </button>
             <button onclick="switchCategory('violencia')" id="tab-violencia" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
                 💜 VIOLENCIA MUJER
@@ -124,11 +124,12 @@
             <p id="pageSubtitle" class="text-blue-400 font-extrabold text-xl mt-1 tracking-wide uppercase">CATEGORÍA EDUCACIÓN</p>
         </div>
 
+        <div id="debugConsole" class="hidden mb-6 p-4 bg-red-950/50 border border-red-500/30 rounded-xl text-xs font-mono text-red-300"></div>
         <div id="indicatorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
     <footer class="border-t border-white/5 bg-slate-950/40 py-4 px-6 text-center text-xs text-slate-500 font-mono">
-        Dashboard Silicon Valley Escalable &bull; Mapeo Automatizado Seguro
+        Dashboard Silicon Valley Escalable &bull; Mapeo Automatizado Inteligente
     </footer>
 
     <script>
@@ -166,8 +167,8 @@
 
             const filtered = fedData.filter(item => item.categoria === currentCategory);
 
-            if(filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-bold">Base de datos sincronizada. No hay registros cargados aún en tu Sheets bajo la categoría descriptiva "${currentCategory}".</div>`;
+            if(filtered.length === 0 && fedData.length > 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-bold">Base de datos leída con éxito, pero ninguna fila coincide con la categoría exacta "${currentCategory}". Revisa las minúsculas en tu Sheets.</div>`;
                 return;
             }
 
@@ -191,7 +192,7 @@
                             <span class="text-xs font-mono font-black bg-white/5 px-2.5 py-1 rounded border border-white/5 text-slate-300">${item.codigo}</span>
                             ${badge}
                         </div>
-                        <h4 class="text-base font-bold text-white leading-snug mb-2 line-clamp-2">${item.titulo || item.codigo}</h4>
+                        <h4 class="text-base font-bold text-white leading-snug mb-2 line-clamp-2">${item.titulo}</h4>
                         <p class="text-slate-400 text-xs line-clamp-3 mb-4 text-justify">${item.descripcion}</p>
                     </div>
                     <div class="border-t border-white/5 pt-4 grid grid-cols-3 gap-1 text-center">
@@ -230,7 +231,7 @@
                         <span class="px-3 py-0.5 text-xs font-bold border rounded ${badgeColor}">${item.estado}</span>
                     </div>
                     
-                    <h3 class="text-xl font-black text-white leading-tight">${item.titulo || item.codigo}</h3>
+                    <h3 class="text-xl font-black text-white leading-tight">${item.titulo}</h3>
                     <p class="text-slate-300 text-xs leading-relaxed text-justify bg-white/5 p-4 rounded-xl border border-white/5">${item.descripcion}</p>
                     
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center bg-slate-900/60 p-4 rounded-xl border border-white/5">
@@ -291,6 +292,7 @@
         function parseCSVLine(text) {
             let p = '', r = [];
             let q = false;
+            if(!text) return r;
             for (let i = 0; i < text.length; i++) {
                 let c = text[i];
                 if (c === '"') { q = !q; }
@@ -303,13 +305,23 @@
         }
 
         async function fetchLiveGoogleSheetsData(csvUrl) {
+            const debugBox = document.getElementById('debugConsole');
             try {
                 const response = await fetch(csvUrl);
                 const csvText = await response.text();
-                const lines = csvText.split(/\r?\n/);
-                if(lines.length < 2) return;
+                const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+                
+                if(lines.length < 2) {
+                    throw new Error("El archivo CSV recibido está vacío o no tiene filas de datos.");
+                }
 
+                // Leer la primera fila (Cabeceras)
                 const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
+                
+                // Consola informativa interna
+                debugBox.classList.remove('hidden');
+                debugBox.innerHTML = `<strong>[DIAGNÓSTICO EN VIVO]</strong><br>• Títulos detectados en tu Fila 1: [${headers.join(' | ')}]`;
+
                 const findIdx = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
 
                 const idx = {
@@ -327,45 +339,58 @@
                     responsable: findIdx(['res'])
                 };
 
+                // Validar si encontró la columna base indispensable
+                if(idx.codigo === -1) {
+                    throw new Error("Conflicto detectado: No encontré ninguna columna que se llame 'Codigo' o 'Indicador' en la primera fila de tu Sheets. Verifica si tu tabla está invertida.");
+                }
+
                 const parsedData = [];
 
                 for(let i = 1; i < lines.length; i++) {
-                    if(!lines[i].trim()) continue;
                     const cols = parseCSVLine(lines[i]);
-                    
-                    if(idx.codigo !== -1 && cols[idx.codigo]) {
-                        let descRaw = idx.descripcion !== -1 && cols[idx.descripcion] ? cols[idx.descripcion] : 'Sin descripción.';
-                        let titleRaw = idx.titulo !== -1 && cols[idx.titulo] ? cols[idx.titulo] : '';
-                        
-                        if(!titleRaw && descRaw) {
-                            titleRaw = descRaw.split(':')[0] || cols[idx.codigo];
-                        }
+                    if(!cols[idx.codigo]) continue; // Ignorar si la celda de código está vacía
 
-                        parsedData.push({
-                            codigo: cols[idx.codigo] || 'S/C',
-                            categoria: (idx.categoria !== -1 && cols[idx.categoria]) ? cols[idx.categoria].toLowerCase().trim() : 'educacion',
-                            titulo: titleRaw,
-                            descripcion: descRaw,
-                            basal: (idx.basal !== -1 && cols[idx.basal]) ? cols[idx.basal] : '-',
-                            meta: (idx.meta !== -1 && cols[idx.meta]) ? cols[idx.meta] : '-',
-                            plazo: (idx.plazo !== -1 && cols[idx.plazo]) ? cols[idx.plazo] : '-',
-                            avance: (idx.avance !== -1 && cols[idx.avance]) ? cols[idx.avance] : '-',
-                            estado: (idx.estado !== -1 && cols[idx.estado]) ? cols[idx.estado].toUpperCase().trim() : 'EN PROCESO',
-                            nudos_criticos: (idx.nudos !== -1 && cols[idx.nudos]) ? cols[idx.nudos] : '',
-                            acciones: (idx.acciones !== -1 && cols[idx.acciones]) ? cols[idx.acciones] : '',
-                            responsable: (idx.responsable !== -1 && cols[idx.responsable]) ? cols[idx.responsable] : ''
-                        });
+                    let descRaw = idx.descripcion !== -1 && cols[idx.descripcion] ? cols[idx.descripcion] : 'Sin descripción asignada.';
+                    let titleRaw = idx.titulo !== -1 && cols[idx.titulo] ? cols[idx.titulo] : '';
+                    
+                    if(!titleRaw && descRaw) {
+                        titleRaw = descRaw.split(':')[0] || cols[idx.codigo];
                     }
+
+                    parsedData.push({
+                        codigo: cols[idx.codigo],
+                        categoria: (idx.categoria !== -1 && cols[idx.categoria]) ? cols[idx.categoria].toLowerCase().trim() : 'educacion',
+                        titulo: titleRaw || cols[idx.codigo],
+                        descripcion: descRaw,
+                        basal: (idx.basal !== -1 && cols[idx.basal]) ? cols[idx.basal] : '-',
+                        meta: (idx.meta !== -1 && cols[idx.meta]) ? cols[idx.meta] : '-',
+                        plazo: (idx.plazo !== -1 && cols[idx.plazo]) ? cols[idx.plazo] : '-',
+                        avance: (idx.avance !== -1 && cols[idx.avance]) ? cols[idx.avance] : '-',
+                        estado: (idx.estado !== -1 && cols[idx.estado]) ? cols[idx.estado].toUpperCase().trim() : 'EN PROCESO',
+                        nudos_criticos: (idx.nudos !== -1 && cols[idx.nudos]) ? cols[idx.nudos] : '',
+                        acciones: (idx.acciones !== -1 && cols[idx.acciones]) ? cols[idx.acciones] : '',
+                        responsable: (idx.responsable !== -1 && cols[idx.responsable]) ? cols[idx.responsable] : ''
+                    });
                 }
 
                 if(parsedData.length > 0) {
                     fedData = parsedData;
+                    debugBox.innerHTML += `<br>• ¡Éxito total! Sincronizadas ${parsedData.length} filas de indicadores correctamente desde la nube.`;
+                    debugBox.className = "mb-6 p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-xl text-xs font-mono text-emerald-300";
+                    
                     document.getElementById('syncStatus').innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span><span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Sheets Conectado Live</span>';
                     document.getElementById('syncStatus').className = "flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-4 py-1.5 rounded-full";
+                    
                     switchCategory('educacion');
+                } else {
+                    throw new Error("No se pudo procesar ninguna fila. Revisa que los códigos no estén vacíos.");
                 }
+
             } catch (error) {
-                console.error("Error en el parser dinámico:", error);
+                console.error("Error en el parser central:", error);
+                debugBox.classList.remove('hidden');
+                debugBox.innerHTML = `<strong>[ERROR DE CONFIGURACIÓN DE TU SPREADSHEET]</strong><br>⚠️ Motivo: ${error.message}<br><br><em>Asegúrate de que la FILA 1 horizontal contenga los nombres de las variables y que la publicación en la web como CSV esté activa.</em>`;
+                
                 document.getElementById('syncStatus').innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span class="text-xs text-red-400 font-bold uppercase tracking-wider">Error de Sincronización</span>';
                 document.getElementById('syncStatus').className = "flex items-center gap-2 bg-red-500/10 border border-red-500/20 px-4 py-1.5 rounded-full";
             }
