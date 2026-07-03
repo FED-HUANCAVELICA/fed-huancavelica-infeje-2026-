@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Corporativo FED - Región Huancavelica</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #05070f;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Efecto de cristal pulido (Glassmorphism) */
+        .glass-card {
+            background: rgba(13, 18, 36, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+            border-color: var(--theme-glow, #3b82f6);
+        }
+
+        /* Animación de entrada para las tarjetas */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl transition-opacity duration-500">
+        <div class="glass-card max-w-4xl w-full mx-4 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row border border-white/10">
+            
+            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[280px]">
+                <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="relative z-10">
+                    <span class="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">EDICIÓN EXPERTA 2026</span>
+                    <h2 class="text-3xl font-black mt-4 leading-tight tracking-tight">Dinamización de la Gestión Pública</h2>
+                </div>
+                <div class="relative z-10">
+                    <p class="text-xs opacity-80 italic border-l-2 border-emerald-400 pl-3">"Garantizando el Desarrollo Infantil Temprano y coberturas sociales integrales en Huancavelica."</p>
+                </div>
+            </div>
+            
+            <div class="md:w-7/12 p-8 md:p-10 flex flex-col justify-between bg-slate-950/95">
+                <div>
+                    <h3 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Monitoreo Estratégico del FED</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-4 text-justify">
+                        El <strong>Fondo de Estímulo al Desempeño y Logro de Resultados Sociales (FED)</strong> opera como un mecanismo de vanguardia en la gestión por resultados, vinculando el financiamiento al cumplimiento estricto de metas regionales.
+                    </p>
+                    <p class="text-slate-300 text-sm leading-relaxed text-justify mb-4">
+                        Este ecosistema de datos se ampara en los mandatos de la Constitución Política del Perú sobre la defensa de la persona humana, y se alinea estratégicamente con la <strong>Política Nacional de Desarrollo e Inclusión Social (PNDIS) al 2030</strong>.
+                    </p>
+                </div>
+                <div class="mt-6">
+                    <button onclick="closeWelcomeModal()" class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-blue-500/20 transform hover:-translate-y-0.5 transition-all cursor-pointer tracking-wide text-center">
+                        INGRESAR AL PANEL DE EXPOSICIÓN
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden transition-all duration-300">
+        <div class="glass-card max-w-3xl w-full mx-4 rounded-2xl overflow-hidden shadow-2xl relative bg-slate-950/95 p-6 md:p-8 border border-white/10">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-
