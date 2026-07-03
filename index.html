@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Corporativo FED - Región Huancavelica</title>
-    <!-- Tailwind CSS para diseño de alta gama -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap');
@@ -42,23 +41,23 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- BIENVENIDA POP-UP INICIAL -->
     <div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl transition-opacity duration-500">
         <div class="glass-card max-w-4xl w-full mx-4 rounded-3xl overflow-hidden shadow-2xl relative flex flex-col md:flex-row border border-white/10">
-            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[250px]">
+            
+            <div class="md:w-5/12 bg-gradient-to-br from-indigo-600 via-blue-700 to-slate-900 p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[280px]">
                 <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay" style="background-image: url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80');"></div>
                 <div class="relative z-10">
                     <span class="text-xs uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">EDICIÓN EXPERTA 2026</span>
                     <h2 class="text-3xl font-black mt-4 leading-tight tracking-tight">Dinamización de la Gestión Pública</h2>
                 </div>
                 <div class="relative z-10">
-                    <p class="text-xs opacity-80 italic border-l-2 border-emerald-400 pl-3">"Garantizando el Desarrollo Infantil Temprano y coberturas sociales en Huancavelica."</p>
+                    <p class="text-xs opacity-80 italic border-l-2 border-emerald-400 pl-3">"Garantizando el Desarrollo Infantil Temprano y coberturas sociales integrales en Huancavelica."</p>
                 </div>
             </div>
             
             <div class="md:w-7/12 p-8 md:p-10 flex flex-col justify-between bg-slate-950/95">
                 <div>
-                    <h3 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Monitoreo Estratégico del FED</h3>
+                    <h3 class="text-2xl font-extrabold text-white mb-4 tracking-tight">Monitoreo Estratégion del FED</h3>
                     <p class="text-slate-300 text-sm leading-relaxed mb-4 text-justify">
                         El <strong>Fondo de Estímulo al Desempeño y Logro de Resultados Sociales (FED)</strong> opera como un mecanismo de vanguardia en la gestión por resultados, vinculando el financiamiento al cumplimiento estricto de metas regionales.
                     </p>
@@ -75,7 +74,6 @@
         </div>
     </div>
 
-    <!-- VENTANA DETALLE MODAL -->
     <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md hidden transition-all duration-300">
         <div class="glass-card max-w-3xl w-full mx-4 rounded-2xl overflow-hidden shadow-2xl relative bg-slate-950/95 p-6 md:p-8 border border-white/10">
             <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all text-sm w-10 h-10 flex items-center justify-center cursor-pointer font-bold">✕</button>
@@ -83,7 +81,6 @@
         </div>
     </div>
 
-    <!-- ENCABEZADO -->
     <header class="border-b border-white/10 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 px-6 py-4">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-4">
@@ -96,33 +93,31 @@
             
             <div id="syncStatus" class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 rounded-full">
                 <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Conectando...</span>
+                <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Sincronizando Base de Datos...</span>
             </div>
         </div>
     </header>
 
-    <!-- NAVEGACIÓN CORREGIDA EN UNA SOLA FILA -->
     <nav class="max-w-7xl mx-auto w-full px-6 mt-6">
-        <div class="bg-slate-950/80 p-2 rounded-2xl border border-white/5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-            <button onclick="switchCategory('educacion')" id="tab-educacion" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+        <div class="bg-slate-950/80 p-2 rounded-2xl border border-white/5 grid grid-cols-5 gap-2 w-full">
+            <button onclick="switchCategory('educacion')" id="tab-educacion" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center bg-blue-600 text-white shadow-lg shadow-blue-600/20">
                 📚 EDUCACIÓN
             </button>
-            <button onclick="switchCategory('salud')" id="tab-salud" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
-                </div>🩺 SALUD
+            <button onclick="switchCategory('salud')" id="tab-salud" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+                实时🩺 SALUD
             </button>
-            <button onclick="switchCategory('violencia')" id="tab-violencia" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+            <button onclick="switchCategory('violencia')" id="tab-violencia" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
                 💜 VIOLENCIA MUJER
             </button>
-            <button onclick="switchCategory('agua')" id="tab-agua" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+            <button onclick="switchCategory('agua')" id="tab-agua" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
                 🚰 AGUA Y SANEAMIENTO
             </button>
-            <button onclick="switchCategory('articulacion')" id="tab-articulacion" class="tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
+            <button onclick="switchCategory('articulacion')" id="tab-articulacion" class="tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5">
                 🤝 ARTICULACIÓN
             </button>
         </div>
     </nav>
 
-    <!-- CUERPO PRINCIPAL -->
     <main class="max-w-7xl mx-auto w-full px-6 py-8 flex-grow">
         <div class="mb-8 text-center md:text-left">
             <h2 class="text-4xl font-black text-white tracking-tight uppercase">MATRIZ DE SEGUIMIENTO EDITORIAL</h2>
@@ -133,10 +128,9 @@
     </main>
 
     <footer class="border-t border-white/5 bg-slate-950/40 py-4 px-6 text-center text-xs text-slate-500 font-mono">
-        Dashboard Silicon Valley Escalable &bull; Mapeo Automatizado Global
+        Dashboard Silicon Valley Escalable &bull; Mapeo Automatizado Seguro
     </footer>
 
-    <!-- INTERFACE LOGIC ENGINE -->
     <script>
         let fedData = [];
         let currentCategory = 'educacion';
@@ -152,14 +146,14 @@
         function switchCategory(cat) {
             currentCategory = cat;
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.className = "tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5";
+                btn.className = "tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center text-slate-400 hover:text-white hover:bg-white/5";
             });
 
             const activeTab = document.getElementById(`tab-${cat}`);
             const subtitle = document.getElementById('pageSubtitle');
             const theme = colorThemes[cat];
             
-            if(activeTab) activeTab.className = `tab-btn px-2 py-3.5 rounded-xl font-bold text-xs tracking-wide transition-all cursor-pointer text-center ${theme.bg} text-white shadow-lg`;
+            if(activeTab) activeTab.className = `tab-btn px-1 py-3.5 rounded-xl font-bold text-[10px] md:text-xs tracking-tight transition-all cursor-pointer text-center ${theme.bg} text-white shadow-lg`;
             subtitle.innerText = cat === 'violencia' ? "CATEGORÍA VIOLENCIA CONTRA LA MUJER" : `CATEGORÍA ${cat.toUpperCase()}`;
             subtitle.className = `${theme.text} font-extrabold text-xl mt-1 tracking-wide uppercase`;
 
@@ -173,7 +167,7 @@
             const filtered = fedData.filter(item => item.categoria === currentCategory);
 
             if(filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-bold">Esperando sincronización o no hay datos para la categoría "${currentCategory}" en tu Sheets.</div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-500 font-bold">Base de datos sincronizada. No hay registros cargados aún en tu Sheets bajo la categoría descriptiva "${currentCategory}".</div>`;
                 return;
             }
 
@@ -312,14 +306,10 @@
             try {
                 const response = await fetch(csvUrl);
                 const csvText = await response.text();
-                // Separar limpiamente por saltos de línea sin importar el sistema operativo
                 const lines = csvText.split(/\r?\n/);
                 if(lines.length < 2) return;
 
-                // Leer cabeceras de forma dinámica y pasarlas a minúsculas limpias
                 const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
-                
-                // Mapeador flexible mediante palabras clave
                 const findIdx = (keys) => headers.findIndex(h => keys.some(k => h.includes(k)));
 
                 const idx = {
@@ -343,29 +333,27 @@
                     if(!lines[i].trim()) continue;
                     const cols = parseCSVLine(lines[i]);
                     
-                    // Si el identificador mínimo (Código) existe, procesamos la fila de forma segura
                     if(idx.codigo !== -1 && cols[idx.codigo]) {
-                        let descRaw = idx.descripcion !== -1 ? cols[idx.descripcion] : '';
-                        let titleRaw = idx.titulo !== -1 ? cols[idx.titulo] : '';
+                        let descRaw = idx.descripcion !== -1 && cols[idx.descripcion] ? cols[idx.descripcion] : 'Sin descripción.';
+                        let titleRaw = idx.titulo !== -1 && cols[idx.titulo] ? cols[idx.titulo] : '';
                         
-                        // Si no hay un título explícito, extraemos los primeros caracteres del indicador
                         if(!titleRaw && descRaw) {
                             titleRaw = descRaw.split(':')[0] || cols[idx.codigo];
                         }
 
                         parsedData.push({
                             codigo: cols[idx.codigo] || 'S/C',
-                            categoria: idx.categoria !== -1 ? cols[idx.categoria].toLowerCase().trim() : 'educacion',
+                            categoria: (idx.categoria !== -1 && cols[idx.categoria]) ? cols[idx.categoria].toLowerCase().trim() : 'educacion',
                             titulo: titleRaw,
-                            descripcion: descRaw || 'Sin descripción.',
-                            basal: idx.basal !== -1 ? cols[idx.basal] : '-',
-                            meta: idx.meta !== -1 ? cols[idx.meta] : '-',
-                            plazo: idx.plazo !== -1 ? cols[idx.plazo] : '-',
-                            avance: idx.avance !== -1 ? cols[idx.avance] : '-',
-                            estado: idx.estado !== -1 ? cols[idx.estado].toUpperCase().trim() : 'EN PROCESO',
-                            nudos_criticos: idx.nudos !== -1 ? cols[idx.nudos] : '',
-                            acciones: idx.acciones !== -1 ? cols[idx.acciones] : '',
-                            responsable: idx.responsable !== -1 ? cols[idx.responsable] : ''
+                            descripcion: descRaw,
+                            basal: (idx.basal !== -1 && cols[idx.basal]) ? cols[idx.basal] : '-',
+                            meta: (idx.meta !== -1 && cols[idx.meta]) ? cols[idx.meta] : '-',
+                            plazo: (idx.plazo !== -1 && cols[idx.plazo]) ? cols[idx.plazo] : '-',
+                            avance: (idx.avance !== -1 && cols[idx.avance]) ? cols[idx.avance] : '-',
+                            estado: (idx.estado !== -1 && cols[idx.estado]) ? cols[idx.estado].toUpperCase().trim() : 'EN PROCESO',
+                            nudos_criticos: (idx.nudos !== -1 && cols[idx.nudos]) ? cols[idx.nudos] : '',
+                            acciones: (idx.acciones !== -1 && cols[idx.acciones]) ? cols[idx.acciones] : '',
+                            responsable: (idx.responsable !== -1 && cols[idx.responsable]) ? cols[idx.responsable] : ''
                         });
                     }
                 }
@@ -383,7 +371,6 @@
             }
         }
 
-        // ENLACE DIRECTO A TU SPREADSHEET EN HUANCAVELICA
         const googleSheetsCSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9zDKSFC5KpqpeLDkuaL183NmuqDnxgIqSB-vI9bp7Lac9tzJGcbse0JVt4mCKxemTiF7jdEiWBiyl/pub?output=csv'; 
         fetchLiveGoogleSheetsData(googleSheetsCSV);
     </script>
